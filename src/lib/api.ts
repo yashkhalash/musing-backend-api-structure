@@ -2,7 +2,9 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api-musing.nyu
 
 export async function fetchHealth() {
   try {
-    const response = await fetch(`${BASE_URL}/health`);
+    const response = await fetch(`${BASE_URL}/health`, {
+      headers: { 'ngrok-skip-browser-warning': 'true' }
+    });
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
@@ -15,7 +17,9 @@ export async function fetchHealth() {
 
 export async function fetchRoutes() {
   try {
-    const response = await fetch(`${BASE_URL}/api/v1/user/auth/routes`);
+    const response = await fetch(`${BASE_URL}/api/v1/user/auth/routes`, {
+      headers: { 'ngrok-skip-browser-warning': 'true' }
+    });
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
@@ -31,7 +35,10 @@ export async function executeApiCall(method: string, path: string, body: any, he
   try {
     const options: RequestInit = {
       method,
-      headers: { ...headers },
+      headers: { 
+        ...headers,
+        'ngrok-skip-browser-warning': 'true'
+      },
     };
 
     if (body) {
