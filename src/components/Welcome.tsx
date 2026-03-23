@@ -15,6 +15,7 @@ export default function Welcome() {
   const [authToken, setAuthToken] = useState("");
   const [copyMsg, setCopyMsg] = useState<string | null>(null);
   const [apiKey, setApiKey] = useState("");
+  const [editableBody, setEditableBody] = useState("");
 
   useEffect(() => {
     async function getHealth() {
@@ -37,6 +38,14 @@ export default function Welcome() {
     setApiResponse(null);
   }, [activeRole]);
 
+  useEffect(() => {
+    if (selectedRoute) {
+      setEditableBody(selectedRoute.body ? JSON.stringify(selectedRoute.body, null, 2) : "");
+    } else {
+      setEditableBody("");
+    }
+  }, [selectedRoute]);
+
   const handleRunApi = async () => {
     if (!selectedRoute) return;
     setExecuting(true);
@@ -47,10 +56,20 @@ export default function Welcome() {
       headers.Authorization = `Bearer ${authToken}`;
     }
 
+    let bodyToUse = selectedRoute.body;
+    if (editableBody) {
+      try {
+        bodyToUse = JSON.parse(editableBody);
+      } catch (e) {
+        console.error("Invalid JSON in payload", e);
+        // Fallback to original body if JSON is invalid, or show error
+      }
+    }
+
     const result = await executeApiCall(
       selectedRoute.method,
       selectedRoute.path,
-      selectedRoute.body,
+      bodyToUse,
       headers
     );
     setApiResponse(result);
@@ -234,9 +253,12 @@ export default function Welcome() {
                     </div>
                   </div>
                   {selectedRoute.body ? (
-                    <pre className="p-6 rounded-2xl bg-white dark:bg-black text-[13px] font-mono leading-relaxed text-zinc-700 dark:text-zinc-400 border border-zinc-200 dark:border-white/5 custom-scrollbar max-h-64 overflow-auto font-bold shadow-inner">
-                      {JSON.stringify(selectedRoute.body, null, 2)}
-                    </pre>
+                    <textarea
+                      value={editableBody}
+                      onChange={(e) => setEditableBody(e.target.value)}
+                      className="w-full p-6 rounded-2xl bg-white dark:bg-black text-[13px] font-mono leading-relaxed text-zinc-700 dark:text-zinc-400 border border-zinc-200 dark:border-white/5 custom-scrollbar h-64 overflow-auto font-bold shadow-inner focus:outline-none focus:border-indigo-500/50 resize-none translate-all duration-300"
+                      spellCheck={false}
+                    />
                   ) : (
                     <div className="p-10 rounded-2xl bg-white dark:bg-black border border-zinc-200 dark:border-white/5 italic text-sm text-zinc-400 dark:text-zinc-700 font-black border-dashed text-center">
                       NO PAYLOAD REQUIRED
