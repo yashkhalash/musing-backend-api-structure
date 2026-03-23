@@ -64,11 +64,14 @@ export default function Welcome() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center p-10 w-full max-w-4xl border rounded-3xl bg-white dark:bg-zinc-950 shadow-2xl transition-all hover:shadow-indigo-500/10">
+    <div className="flex flex-col items-center justify-center p-10 w-full max-w-7xl border rounded-3xl bg-white dark:bg-zinc-950 shadow-2xl transition-all hover:shadow-indigo-500/10">
       <h1 className="text-6xl font-black mb-3 text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-gradient-x">
         Musing
       </h1>
-      <p className="text-zinc-500 mb-10 font-bold text-lg uppercase tracking-[0.3em]">Developer Console</p>
+      <p className="text-zinc-500 mb-2 font-bold text-lg uppercase tracking-[0.3em]">Developer Console</p>
+      <div className="mb-10 px-4 py-1.5 rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-white/5 text-[10px] font-mono font-black text-zinc-400">
+        CONNECTED TO: <span className="text-indigo-500">{process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api-musing.nyusoft.in'}</span>
+      </div>
 
       {copyMsg && (
         <div className="fixed top-10 right-10 bg-green-500 text-white px-6 py-3 rounded-2xl shadow-2xl z-50 animate-bounce font-black text-sm uppercase tracking-widest">
@@ -115,166 +118,179 @@ export default function Welcome() {
         </div>
       </div>
 
-      <div className="w-full flex flex-col gap-3">
-        <p className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-1">Available Routes</p>
-        <div className="grid grid-cols-1 gap-2">
-          {routes.map((route, idx) => (
-            <div
-              key={route.path}
-              onClick={() => setSelectedRoute(route)}
-              style={{ animationDelay: `${route.animationDelay}s` }}
-              className={`flex items-center justify-between p-4 rounded-xl border transition-all cursor-pointer group animate-fade-in-up ${
-                selectedRoute?.path === route.path 
-                  ? 'border-purple-500 bg-purple-500/5 ring-2 ring-purple-500/20' 
-                  : 'border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-800/20 hover:border-purple-500/30'
-              }`}
-            >
-              <div className="flex items-center gap-4">
-                <div className={`h-10 w-10 rounded-lg flex items-center justify-center transition-colors ${
-                  selectedRoute?.path === route.path ? 'bg-purple-500 text-white' : 'bg-zinc-100 dark:bg-zinc-800 group-hover:bg-purple-500/10 group-hover:text-purple-500'
-                }`}>
-                  <div className={`h-5 w-5 border-2 rounded-sm ${
-                    selectedRoute?.path === route.path ? 'border-white' : 'border-zinc-300 dark:border-zinc-600 group-hover:border-purple-400'
-                  }`}></div>
-                </div>
-                <div className="flex flex-col">
-                  <div className="flex items-center gap-3">
-                    <span className={`text-[10px] font-black px-2 py-1 rounded-md ${
-                      route.method === 'POST' ? 'bg-amber-500/20 text-amber-500' : 
-                      route.method === 'PUT' ? 'bg-blue-500/20 text-blue-500' : 
-                      route.method === 'DELETE' ? 'bg-red-500/20 text-red-500' : 
-                      'bg-green-500/20 text-green-500'
-                    }`}>
-                      {route.method}
-                    </span>
-                    <span className={`text-lg font-black ${selectedRoute?.path === route.path ? 'text-purple-600 dark:text-purple-400' : 'text-zinc-900 dark:text-zinc-100'}`}>{route.label}</span>
+      <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+        {/* Left Column: Routes List */}
+        <div className={`flex flex-col gap-3 transition-all duration-500 ${selectedRoute ? 'lg:col-span-4' : 'lg:col-span-12'}`}>
+          <p className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-1">Available Routes</p>
+          <div className="grid grid-cols-1 gap-2">
+            {routes.map((route, idx) => (
+              <div
+                key={route.path}
+                onClick={() => setSelectedRoute(route)}
+                style={{ animationDelay: `${route.animationDelay}s` }}
+                className={`flex items-center justify-between p-4 rounded-xl border transition-all cursor-pointer group animate-fade-in-up ${
+                  selectedRoute?.path === route.path 
+                    ? 'border-purple-500 bg-purple-500/5 ring-2 ring-purple-500/20' 
+                    : 'border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-800/20 hover:border-purple-500/30'
+                }`}
+              >
+                <div className="flex items-center gap-4">
+                  <div className={`h-10 w-10 rounded-lg flex items-center justify-center transition-colors ${
+                    selectedRoute?.path === route.path ? 'bg-purple-500 text-white' : 'bg-zinc-100 dark:bg-zinc-800 group-hover:bg-purple-500/10 group-hover:text-purple-500'
+                  }`}>
+                    <div className={`h-5 w-5 border-2 rounded-sm ${
+                      selectedRoute?.path === route.path ? 'border-white' : 'border-zinc-300 dark:border-zinc-600 group-hover:border-purple-400'
+                    }`}></div>
                   </div>
-                  <span className="text-xs text-zinc-500 font-mono font-bold tracking-tight mt-1">{route.path}</span>
+                  <div className="flex flex-col">
+                    <div className="flex items-center gap-2">
+                      <span className={`text-[8px] font-black px-1.5 py-0.5 rounded-md ${
+                        route.method === 'POST' ? 'bg-amber-500/20 text-amber-500' : 
+                        route.method === 'PUT' ? 'bg-blue-500/20 text-blue-500' : 
+                        route.method === 'DELETE' ? 'bg-red-500/20 text-red-500' : 
+                        'bg-green-500/20 text-green-500'
+                      }`}>
+                        {route.method}
+                      </span>
+                      <span className={`text-sm font-black ${selectedRoute?.path === route.path ? 'text-purple-600 dark:text-purple-400' : 'text-zinc-900 dark:text-zinc-100'}`}>{route.label}</span>
+                    </div>
+                    <span className="text-[10px] text-zinc-500 font-mono font-bold tracking-tight mt-0.5 truncate max-w-[150px]">{route.path}</span>
+                  </div>
+                </div>
+                <div className={`${selectedRoute?.path === route.path ? 'opacity-100' : 'opacity-0'} group-hover:opacity-100 transition-opacity text-purple-500`}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
                 </div>
               </div>
-              <div className={`${selectedRoute?.path === route.path ? 'opacity-100' : 'opacity-0'} group-hover:opacity-100 transition-opacity text-purple-500`}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            ))}
+          </div>
+        </div>
+
+        {/* Right Column: Integration Details */}
+        <div className={`lg:col-span-8 transition-all duration-500 ${selectedRoute ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none hidden lg:block lg:invisible'}`}>
+          {selectedRoute ? (
+            <div className="w-full p-8 rounded-3xl bg-zinc-50 dark:bg-zinc-900/50 text-zinc-900 dark:text-zinc-100 shadow-2xl animate-fade-in-up border border-zinc-200 dark:border-white/5">
+              <div className="flex items-center justify-between mb-8">
+                <div className="flex flex-col">
+                  <h3 className="text-sm font-black uppercase tracking-[0.3em] text-purple-600 dark:text-purple-400">Request Integration</h3>
+                  <p className="text-xs text-zinc-500 font-black mt-1">{selectedRoute.label}</p>
+                </div>
+                <button onClick={() => setSelectedRoute(null)} className="h-10 w-10 rounded-full flex items-center justify-center bg-zinc-200 dark:bg-white/5 hover:bg-zinc-300 dark:hover:bg-white/10 transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                </button>
+              </div>
+              
+              <div className="flex flex-col gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-2">
+                      <span className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em] px-1">Bearer Token</span>
+                      <input 
+                        type="text" 
+                        placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6..."
+                        value={authToken}
+                        onChange={(e) => setAuthToken(e.target.value)}
+                        className="w-full p-4 bg-white dark:bg-black/50 rounded-2xl border border-zinc-200 dark:border-white/10 text-xs font-mono text-purple-600 dark:text-purple-300 placeholder:text-zinc-300 dark:placeholder:text-zinc-800 focus:outline-none focus:border-purple-500 transition-all font-bold"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <span className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em] px-1">API Key (x-api-key)</span>
+                      <input 
+                        type="text" 
+                        placeholder="your_api_key_here"
+                        value={apiKey}
+                        onChange={(e) => setApiKey(e.target.value)}
+                        className="w-full p-4 bg-white dark:bg-black/50 rounded-2xl border border-zinc-200 dark:border-white/10 text-xs font-mono text-amber-600 dark:text-amber-300 placeholder:text-zinc-300 dark:placeholder:text-zinc-800 focus:outline-none focus:border-amber-500 transition-all font-bold"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center justify-between px-1">
+                      <span className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em]">Endpoint</span>
+                      <button onClick={() => copyToClipboard(`http://localhost:5000${selectedRoute.path}`, 'URL')} className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 hover:scale-105 transition-transform uppercase tracking-widest">Copy URL</button>
+                    </div>
+                    <div className="flex items-center gap-3 p-4 bg-white dark:bg-black/50 rounded-2xl border border-zinc-200 dark:border-white/10 h-full">
+                      <span className={`text-[10px] font-black px-2 py-1 rounded-md ${
+                        selectedRoute.method === 'POST' ? 'bg-amber-500 text-white' : 
+                        selectedRoute.method === 'PUT' ? 'bg-blue-500 text-white' : 
+                        selectedRoute.method === 'DELETE' ? 'bg-red-500 text-white' : 
+                        'bg-green-500 text-white'
+                      }`}>
+                        {selectedRoute.method}
+                      </span>
+                      <code className="text-xs font-mono text-zinc-800 dark:text-zinc-300 truncate font-black">{selectedRoute.path}</code>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center justify-between px-1">
+                    <span className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em]">Payload Configuration</span>
+                    <div className="flex items-center gap-4">
+                      <button onClick={() => copyToClipboard(JSON.stringify(selectedRoute.body, null, 2), 'Body')} className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 hover:scale-105 transition-transform uppercase tracking-widest">Copy Body</button>
+                      <span className="text-[10px] font-black text-zinc-400 dark:text-zinc-600 uppercase tracking-widest bg-zinc-200 dark:bg-white/5 px-2 py-1 rounded-md">
+                        {Array.isArray(selectedRoute.body) ? 'Multipart' : 'JSON'}
+                      </span>
+                    </div>
+                  </div>
+                  {selectedRoute.body ? (
+                    <pre className="p-6 rounded-2xl bg-white dark:bg-black text-[13px] font-mono leading-relaxed text-zinc-700 dark:text-zinc-400 border border-zinc-200 dark:border-white/5 custom-scrollbar max-h-64 overflow-auto font-bold shadow-inner">
+                      {JSON.stringify(selectedRoute.body, null, 2)}
+                    </pre>
+                  ) : (
+                    <div className="p-10 rounded-2xl bg-white dark:bg-black border border-zinc-200 dark:border-white/5 italic text-sm text-zinc-400 dark:text-zinc-700 font-black border-dashed text-center">
+                      NO PAYLOAD REQUIRED
+                    </div>
+                  )}
+                </div>
+
+                <button 
+                  onClick={handleRunApi}
+                  disabled={executing}
+                  className={`w-full py-5 rounded-2xl font-black uppercase tracking-[0.3em] text-md transition-all shadow-2xl active:scale-[0.98] ${
+                    executing 
+                      ? 'bg-zinc-200 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-600 cursor-not-allowed' 
+                      : 'bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white hover:shadow-indigo-500/30'
+                  }`}
+                >
+                  {executing ? (
+                    <span className="flex items-center justify-center gap-3">
+                      <span className="h-5 w-5 border-3 border-white/20 border-t-white rounded-full animate-spin"></span>
+                      TESTING ENDPOINT...
+                    </span>
+                  ) : 'EXECUTE API CALL'}
+                </button>
+
+                {apiResponse && (
+                  <div className="flex flex-col gap-3 animate-fade-in-up">
+                    <div className="flex items-center justify-between px-1">
+                      <span className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em]">Server Response</span>
+                      <div className="flex items-center gap-4">
+                        <button onClick={() => copyToClipboard(JSON.stringify(apiResponse.data, null, 2), 'Response')} className="text-[10px] font-black text-green-600 hover:scale-105 transition-transform uppercase tracking-widest">Copy Result</button>
+                        <span className={`text-[10px] font-black px-2 py-1 rounded-md shadow-sm ${
+                          apiResponse.status >= 200 && apiResponse.status < 300 ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+                        }`}>
+                          {apiResponse.status} {apiResponse.statusText}
+                        </span>
+                      </div>
+                    </div>
+                    <pre className="p-6 rounded-2xl bg-white dark:bg-black text-[13px] font-mono leading-relaxed text-zinc-800 dark:text-green-500 border border-zinc-200 dark:border-white/5 custom-scrollbar max-h-80 overflow-auto font-bold shadow-inner">
+                      {typeof apiResponse.data === 'string' ? apiResponse.data : JSON.stringify(apiResponse.data, null, 2)}
+                    </pre>
+                  </div>
+                )}
               </div>
             </div>
-          ))}
+          ) : (
+            <div className="h-full min-h-[400px] flex flex-col items-center justify-center p-12 rounded-3xl border-2 border-dashed border-zinc-100 dark:border-white/5 opacity-50">
+              <div className="h-16 w-16 rounded-2xl bg-zinc-100 dark:bg-white/5 flex items-center justify-center mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-zinc-300"><path d="m9 18 6-6-6-6"/></svg>
+              </div>
+              <p className="text-sm font-black text-zinc-400 uppercase tracking-widest">Select a route to view integration</p>
+            </div>
+          )}
         </div>
       </div>
-
-      {selectedRoute && (
-        <div className="w-full mt-10 p-8 rounded-3xl bg-zinc-50 dark:bg-zinc-900/50 text-zinc-900 dark:text-zinc-100 shadow-2xl animate-fade-in-up border border-zinc-200 dark:border-white/5">
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex flex-col">
-              <h3 className="text-sm font-black uppercase tracking-[0.3em] text-purple-600 dark:text-purple-400">Request Integration</h3>
-              <p className="text-xs text-zinc-500 font-black mt-1">{selectedRoute.label}</p>
-            </div>
-            <button onClick={() => setSelectedRoute(null)} className="h-10 w-10 rounded-full flex items-center justify-center bg-zinc-200 dark:bg-white/5 hover:bg-zinc-300 dark:hover:bg-white/10 transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-            </button>
-          </div>
-          
-          <div className="flex flex-col gap-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="flex flex-col gap-4">
-                <div className="flex flex-col gap-2">
-                  <span className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em] px-1">Bearer Token</span>
-                  <input 
-                    type="text" 
-                    placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6..."
-                    value={authToken}
-                    onChange={(e) => setAuthToken(e.target.value)}
-                    className="w-full p-4 bg-white dark:bg-black/50 rounded-2xl border border-zinc-200 dark:border-white/10 text-xs font-mono text-purple-600 dark:text-purple-300 placeholder:text-zinc-300 dark:placeholder:text-zinc-800 focus:outline-none focus:border-purple-500 transition-all font-bold"
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <span className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em] px-1">API Key (x-api-key)</span>
-                  <input 
-                    type="text" 
-                    placeholder="your_api_key_here"
-                    value={apiKey}
-                    onChange={(e) => setApiKey(e.target.value)}
-                    className="w-full p-4 bg-white dark:bg-black/50 rounded-2xl border border-zinc-200 dark:border-white/10 text-xs font-mono text-amber-600 dark:text-amber-300 placeholder:text-zinc-300 dark:placeholder:text-zinc-800 focus:outline-none focus:border-amber-500 transition-all font-bold"
-                  />
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center justify-between px-1">
-                  <span className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em]">Endpoint</span>
-                  <button onClick={() => copyToClipboard(`http://localhost:5000${selectedRoute.path}`, 'URL')} className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 hover:scale-105 transition-transform uppercase tracking-widest">Copy URL</button>
-                </div>
-                <div className="flex items-center gap-3 p-4 bg-white dark:bg-black/50 rounded-2xl border border-zinc-200 dark:border-white/10 h-full">
-                  <span className={`text-[10px] font-black px-2 py-1 rounded-md ${
-                    selectedRoute.method === 'POST' ? 'bg-amber-500 text-white' : 
-                    selectedRoute.method === 'PUT' ? 'bg-blue-500 text-white' : 
-                    selectedRoute.method === 'DELETE' ? 'bg-red-500 text-white' : 
-                    'bg-green-500 text-white'
-                  }`}>
-                    {selectedRoute.method}
-                  </span>
-                  <code className="text-xs font-mono text-zinc-800 dark:text-zinc-300 truncate font-black">{selectedRoute.path}</code>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center justify-between px-1">
-                <span className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em]">Payload Configuration</span>
-                <div className="flex items-center gap-4">
-                  <button onClick={() => copyToClipboard(JSON.stringify(selectedRoute.body, null, 2), 'Body')} className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 hover:scale-105 transition-transform uppercase tracking-widest">Copy Body</button>
-                  <span className="text-[10px] font-black text-zinc-400 dark:text-zinc-600 uppercase tracking-widest bg-zinc-200 dark:bg-white/5 px-2 py-1 rounded-md">
-                    {Array.isArray(selectedRoute.body) ? 'Multipart' : 'JSON'}
-                  </span>
-                </div>
-              </div>
-              {selectedRoute.body ? (
-                <pre className="p-6 rounded-2xl bg-white dark:bg-black text-[13px] font-mono leading-relaxed text-zinc-700 dark:text-zinc-400 border border-zinc-200 dark:border-white/5 custom-scrollbar max-h-64 overflow-auto font-bold shadow-inner">
-                  {JSON.stringify(selectedRoute.body, null, 2)}
-                </pre>
-              ) : (
-                <div className="p-10 rounded-2xl bg-white dark:bg-black border border-zinc-200 dark:border-white/5 italic text-sm text-zinc-400 dark:text-zinc-700 font-black border-dashed text-center">
-                  NO PAYLOAD REQUIRED
-                </div>
-              )}
-            </div>
-
-            <button 
-              onClick={handleRunApi}
-              disabled={executing}
-              className={`w-full py-5 rounded-2xl font-black uppercase tracking-[0.3em] text-md transition-all shadow-2xl active:scale-[0.98] ${
-                executing 
-                  ? 'bg-zinc-200 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-600 cursor-not-allowed' 
-                  : 'bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white hover:shadow-indigo-500/30'
-              }`}
-            >
-              {executing ? (
-                <span className="flex items-center justify-center gap-3">
-                  <span className="h-5 w-5 border-3 border-white/20 border-t-white rounded-full animate-spin"></span>
-                  TESTING ENDPOINT...
-                </span>
-              ) : 'EXECUTE API CALL'}
-            </button>
-
-            {apiResponse && (
-              <div className="flex flex-col gap-3 animate-fade-in-up">
-                <div className="flex items-center justify-between px-1">
-                  <span className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em]">Server Response</span>
-                  <div className="flex items-center gap-4">
-                    <button onClick={() => copyToClipboard(JSON.stringify(apiResponse.data, null, 2), 'Response')} className="text-[10px] font-black text-green-600 hover:scale-105 transition-transform uppercase tracking-widest">Copy Result</button>
-                    <span className={`text-[10px] font-black px-2 py-1 rounded-md shadow-sm ${
-                      apiResponse.status >= 200 && apiResponse.status < 300 ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
-                    }`}>
-                      {apiResponse.status} {apiResponse.statusText}
-                    </span>
-                  </div>
-                </div>
-                <pre className="p-6 rounded-2xl bg-white dark:bg-black text-[13px] font-mono leading-relaxed text-zinc-800 dark:text-green-500 border border-zinc-200 dark:border-white/5 custom-scrollbar max-h-80 overflow-auto font-bold shadow-inner">
-                  {typeof apiResponse.data === 'string' ? apiResponse.data : JSON.stringify(apiResponse.data, null, 2)}
-                </pre>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
 
       <style jsx global>{`
         .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
