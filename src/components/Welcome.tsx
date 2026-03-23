@@ -84,6 +84,7 @@ export default function Welcome() {
 
   return (
     <div className="flex flex-col items-center justify-center p-10 w-full max-w-7xl border rounded-3xl bg-white dark:bg-zinc-950 shadow-2xl transition-all hover:shadow-indigo-500/10">
+      <p className="text-[10px] font-black uppercase tracking-[0.5em] text-indigo-500 mb-2 opacity-80">Welcome Musing App</p>
       <h1 className="text-6xl font-black mb-3 text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-gradient-x">
         Musing
       </h1>
