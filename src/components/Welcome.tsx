@@ -84,13 +84,36 @@ export default function Welcome() {
 
   return (
     <div className="flex flex-col items-center justify-center p-10 w-full max-w-7xl border rounded-3xl bg-white dark:bg-zinc-950 shadow-2xl transition-all hover:shadow-indigo-500/10">
-      <p className="text-[10px] font-black uppercase tracking-[0.5em] text-indigo-500 mb-2 opacity-80">Welcome Musing App</p>
-      <h1 className="text-6xl font-black mb-3 text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-gradient-x">
-        Musing
-      </h1>
-      <p className="text-zinc-500 mb-2 font-bold text-lg uppercase tracking-[0.3em]">Developer Console</p>
-      <div className="mb-10 px-4 py-1.5 rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-white/5 text-[10px] font-mono font-black text-zinc-400">
-        CONNECTED TO: <span className="text-indigo-500">{process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api-musing.nyusoft.in'}</span>
+      {/* Animated Welcome Screen */}
+      <div className="flex flex-col items-center justify-center mb-10 relative">
+        <div className="absolute inset-0 -z-10 bg-indigo-500/5 blur-[100px] rounded-full animate-pulse-slow"></div>
+        
+        <p className="text-[14px] font-black uppercase tracking-[0.8em] text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400 mb-6 opacity-0 animate-reveal-down drop-shadow-[0_0_15px_rgba(129,140,248,0.3)]">
+          Welcome Musing App
+        </p>
+        
+        <div className="relative group mb-4">
+          <div className="absolute -inset-4 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+          <img 
+            src="/Logo.png" 
+            alt="Musing Logo" 
+            className="h-24 w-24 object-contain animate-float drop-shadow-2xl relative"
+          />
+        </div>
+
+        <div className="relative group">
+          <h1 className="text-8xl font-black mb-4 text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-shimmer select-none cursor-default">
+            Musing
+          </h1>
+        </div>
+
+        <p className="text-zinc-500 font-bold text-xl uppercase tracking-[0.4em] opacity-0 animate-reveal-up border-t border-zinc-100 dark:border-white/5 pt-4">
+          Developer Console
+        </p>
+      </div>
+
+      <div className="mb-10 px-5 py-2 rounded-full bg-zinc-100/50 dark:bg-zinc-900/50 backdrop-blur-md border border-zinc-200 dark:border-white/5 text-[11px] font-mono font-black text-zinc-400 shadow-sm animate-fade-in">
+        CONNECTED TO: <span className="text-indigo-500 tracking-wider hover:text-indigo-400 transition-colors">{process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api-musing.nyusoft.in'}</span>
       </div>
 
       {copyMsg && (
@@ -319,20 +342,59 @@ export default function Welcome() {
         .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        
+        @keyframes fade-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+        @keyframes reveal-down {
+          from { opacity: 0; transform: translateY(-20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes reveal-up {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes shimmer {
+          0% { background-position: -200% center; }
+          100% { background-position: 200% center; }
+        }
+
+        @keyframes pulse-slow {
+          0%, 100% { opacity: 0.3; transform: scale(1); }
+          50% { opacity: 0.6; transform: scale(1.1); }
+        }
+
         @keyframes fade-in-up {
           from { opacity: 0; transform: translateY(10px); }
           to { opacity: 1; transform: translateY(0); }
         }
+
+        @keyframes float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
+        }
+
+        .animate-float { animation: float 6s ease-in-out infinite; }
+
+        .animate-fade-in { animation: fade-in 1s ease-out forwards; }
+        .animate-reveal-down { animation: reveal-down 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards; }
+        .animate-reveal-up { animation: reveal-up 1s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards; }
+        
+        .animate-shimmer {
+          background-size: 200% auto;
+          animation: shimmer 5s linear infinite;
+        }
+
+        .animate-pulse-slow {
+          animation: pulse-slow 8s ease-in-out infinite;
+        }
+
         .animate-fade-in-up {
           animation: fade-in-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-        @keyframes gradient-x {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-        }
-        .animate-gradient-x {
-          background-size: 200% 200%;
-          animation: gradient-x 15s ease infinite;
         }
       `}</style>
     </div>

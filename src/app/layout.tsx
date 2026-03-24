@@ -13,8 +13,17 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Musing APP",
-  description: "Musing APP",
+  title: "Musing",
+  description: "Musing Developer Console",
+  icons: {
+    icon: [
+      { url: "/Logo.png" },
+      { url: "/Logo.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: [
+      { url: "/Logo.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
 };
 
 export default function RootLayout({
