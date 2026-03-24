@@ -35,7 +35,7 @@ export async function executeApiCall(method: string, path: string, body: any, he
   try {
     const options: RequestInit = {
       method,
-      headers: { 
+      headers: {
         ...headers,
         'ngrok-skip-browser-warning': 'true'
       },
